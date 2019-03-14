@@ -2,6 +2,7 @@ package org.fasttrackit.persistence;
 
 import org.fasttrackit.domain.PhoneAddress;
 import org.fasttrackit.transfer.AddressWithId;
+import org.fasttrackit.transfer.IdAddress;
 import org.fasttrackit.transfer.SaveAddressRequest;
 
 import java.io.IOException;
@@ -47,9 +48,7 @@ public class AddressRepository {
         }
     }
 
-    public AddressWithId updateAddress(AddressWithId request) throws SQLException, IOException, ClassNotFoundException {
-
-
+    public void updateAddress(AddressWithId request) throws SQLException, IOException, ClassNotFoundException {
         try (Connection connection = DatabaseConfiguration.getConnection()) {
 
             String insertSql = "UPDATE phone_address SET firstname = ?, lastname = ? WHERE id = ?";
@@ -61,36 +60,53 @@ public class AddressRepository {
 
             preparedStatement.executeUpdate();
             System.out.println("*Update successful.");
+
+        } catch (Exception e) {
+            System.out.println("*Invalid update");
         }
-        return request;
     }
 
-//    on working
+    public void deleteAddress(IdAddress request) throws SQLException, IOException, ClassNotFoundException {
+        try (Connection connection = DatabaseConfiguration.getConnection()) {
+
+            String insertSql = "DELETE FROM phone_address WHERE id = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(insertSql);
+            preparedStatement.setLong(1, request.getId());
+
+            preparedStatement.executeUpdate();
+            System.out.println("*Delete successful.");
+
+        } catch (Exception e) {
+            System.out.println("*Invalid delete operation");
+        }
+    }
+
+    //    on working
     public AddressWithId findAddress(SaveAddressRequest request) throws SQLException, IOException, ClassNotFoundException {
 
         AddressWithId phoneAddress = new AddressWithId();
 
         try (Connection connection = DatabaseConfiguration.getConnection()) {
 
-           String insertSql = "SELECT * FROM phone_address WHERE firstname=? OR lastname=?";
+            String insertSql = "SELECT * FROM phone_address WHERE firstname=? OR lastname=?";
 
-           PreparedStatement preparedStatement = connection.prepareStatement(insertSql);
-           preparedStatement.setString(1, request.getFirstname());
-           preparedStatement.setString(2, request.getLastname());
+            PreparedStatement preparedStatement = connection.prepareStatement(insertSql);
+            preparedStatement.setString(1, request.getFirstname());
+            preparedStatement.setString(2, request.getLastname());
 
 //           Statement statement = connection.createStatement();
-           ResultSet resultSet = preparedStatement.executeQuery(insertSql);
+            ResultSet resultSet = preparedStatement.executeQuery(insertSql);
 
 //           PhoneAddress phoneAddress = new PhoneAddress();
-           phoneAddress.setFirstname(resultSet.getString(1));
-           phoneAddress.setLastname(resultSet.getString(2));
-           phoneAddress.setNumber(resultSet.getInt("number"));
-           phoneAddress.setId(resultSet.getLong("id"));
+            phoneAddress.setFirstname(resultSet.getString(1));
+            phoneAddress.setLastname(resultSet.getString(2));
+            phoneAddress.setNumber(resultSet.getInt("number"));
+            phoneAddress.setId(resultSet.getLong("id"));
 
         }
         return phoneAddress;
     }
-
 
 
 }

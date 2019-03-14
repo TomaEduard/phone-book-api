@@ -4,6 +4,7 @@ import org.fasttrackit.domain.PhoneAddress;
 import org.fasttrackit.persistence.AddressRepository;
 import org.fasttrackit.transfer.AddressListResponse;
 import org.fasttrackit.transfer.AddressWithId;
+import org.fasttrackit.transfer.IdAddress;
 import org.fasttrackit.transfer.SaveAddressRequest;
 
 import java.io.IOException;
@@ -26,9 +27,14 @@ public class AddressService {
         return new AddressListResponse(phoneAddress);
     }
 
-    public AddressWithId updateAddress(AddressWithId request) throws SQLException, IOException, ClassNotFoundException {
+    public void updateAddress(AddressWithId request) throws SQLException, IOException, ClassNotFoundException {
         System.out.println("*Update Address: " + request);
-        return addressRepository.updateAddress(request);
+        addressRepository.updateAddress(request);
+    }
+
+    public void deleteAddress(IdAddress request) throws SQLException, IOException, ClassNotFoundException {
+        System.out.println("*Delete Address: " + request);
+        addressRepository.deleteAddress(request);
     }
 
 //    public PhoneAddress FindAddressService(SaveAddressRequest request) throws SQLException, IOException, ClassNotFoundException {

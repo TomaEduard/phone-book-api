@@ -6,7 +6,6 @@ public class SaveAddressRequest {
     private String lastname;
     private int number;
 
-
     public String getFirstname() {
         return firstname;
     }
