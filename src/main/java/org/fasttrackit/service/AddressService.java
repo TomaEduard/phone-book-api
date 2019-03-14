@@ -2,10 +2,7 @@ package org.fasttrackit.service;
 
 import org.fasttrackit.domain.PhoneAddress;
 import org.fasttrackit.persistence.AddressRepository;
-import org.fasttrackit.transfer.AddressListResponse;
-import org.fasttrackit.transfer.AddressWithId;
-import org.fasttrackit.transfer.IdAddress;
-import org.fasttrackit.transfer.SaveAddressRequest;
+import org.fasttrackit.transfer.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,7 +20,7 @@ public class AddressService {
 
     public AddressListResponse getAddressList() throws SQLException, IOException, ClassNotFoundException {
         System.out.println("*Retriving Address List: ");
-        List<PhoneAddress> phoneAddress = addressRepository.getPhoneAddress();
+        List<PhoneAddress> phoneAddress = addressRepository.getAddress();
         return new AddressListResponse(phoneAddress);
     }
 
@@ -37,9 +34,15 @@ public class AddressService {
         addressRepository.deleteAddress(request);
     }
 
-//    public PhoneAddress FindAddressService(SaveAddressRequest request) throws SQLException, IOException, ClassNotFoundException {
-//        System.out.println("*Find Address: " + request);
-//        return new AddressRepository().findAddress(request);
-//    }
+    public void deleteMultipleAddress(IdAddress request) throws SQLException, IOException, ClassNotFoundException {
+        System.out.println("*Delete the last #" + request + " addresses");
+        addressRepository.deleteMultipleAddress(request);
+    }
+
+    public AddressListResponse findAddressService(FirstNameLastNameAddress request) throws SQLException, IOException, ClassNotFoundException {
+        System.out.println("*Retriving Address List: " + request);
+        List<PhoneAddress> phoneAddress = addressRepository.findAddress(request);
+        return new AddressListResponse(phoneAddress);
+    }
 
 }

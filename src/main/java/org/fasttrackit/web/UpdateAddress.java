@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/change-address")
-public class ChangeAddress extends HttpServlet {
+@WebServlet(urlPatterns = "/update-address")
+public class UpdateAddress extends HttpServlet {
 
     private AddressService addressService = new AddressService();
 

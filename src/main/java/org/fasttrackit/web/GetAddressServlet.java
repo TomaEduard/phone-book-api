@@ -19,12 +19,11 @@ public class GetAddressServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            AddressListResponse phoneAddressListResponse = addressService.getAddressList();
+            AddressListResponse addressListResponse = addressService.getAddressList();
             ObjectMapper objectMapper = new ObjectMapper();
 //            Cand transformi un obiect in string se numeste serializare(serializing/marshalling)
 //            objectMapper.writeValueAsString(topWinners);
-            String responseJson = objectMapper.writeValueAsString(phoneAddressListResponse);
-
+            String responseJson = objectMapper.writeValueAsString(addressListResponse);
 //            content type or mime type
             resp.setContentType("application/json");
             resp.getWriter().print(responseJson);

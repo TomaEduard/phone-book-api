@@ -2,6 +2,7 @@ package org.fasttrackit.persistence;
 
 import org.fasttrackit.domain.PhoneAddress;
 import org.fasttrackit.transfer.AddressWithId;
+import org.fasttrackit.transfer.FirstNameLastNameAddress;
 import org.fasttrackit.transfer.IdAddress;
 import org.fasttrackit.transfer.SaveAddressRequest;
 
@@ -26,10 +27,9 @@ public class AddressRepository {
         }
     }
 
-    public List<PhoneAddress> getPhoneAddress() throws SQLException, IOException, ClassNotFoundException {
+    public List<PhoneAddress> getAddress() throws SQLException, IOException, ClassNotFoundException {
         try (Connection connection = DatabaseConfiguration.getConnection()) {
-            String query =
-                    "SELECT id, firstname, lastname, number  FROM phone_address ORDER BY id ASC";
+            String query = "SELECT * FROM phone_address ORDER BY id ASC";
 
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
@@ -51,12 +51,13 @@ public class AddressRepository {
     public void updateAddress(AddressWithId request) throws SQLException, IOException, ClassNotFoundException {
         try (Connection connection = DatabaseConfiguration.getConnection()) {
 
-            String insertSql = "UPDATE phone_address SET firstname = ?, lastname = ? WHERE id = ?";
+            String insertSql = "UPDATE phone_address SET firstname=?, lastname=?, number=? WHERE id = ?";
 
             PreparedStatement preparedStatement = connection.prepareStatement(insertSql);
             preparedStatement.setString(1, request.getFirstname());
             preparedStatement.setString(2, request.getLastname());
-            preparedStatement.setLong(3, request.getId());
+            preparedStatement.setInt(3, request.getNumber());
+            preparedStatement.setLong(4, request.getId());
 
             preparedStatement.executeUpdate();
             System.out.println("*Update successful.");
@@ -82,11 +83,23 @@ public class AddressRepository {
         }
     }
 
-    //    on working
-    public AddressWithId findAddress(SaveAddressRequest request) throws SQLException, IOException, ClassNotFoundException {
+    public void deleteMultipleAddress(IdAddress request) throws SQLException, IOException, ClassNotFoundException {
+        try (Connection connection = DatabaseConfiguration.getConnection()) {
 
-        AddressWithId phoneAddress = new AddressWithId();
+            String insertSql = "DELETE FROM phone_address ORDER BY id DESC limit ?";
 
+            PreparedStatement preparedStatement = connection.prepareStatement(insertSql);
+            preparedStatement.setLong(1, request.getId());
+
+            preparedStatement.executeUpdate();
+            System.out.println("*Delete successful.");
+
+        } catch (Exception e) {
+            System.out.println("*Invalid delete operation");
+        }
+    }
+
+    public List<PhoneAddress> findAddress(FirstNameLastNameAddress request) throws SQLException, IOException, ClassNotFoundException {
         try (Connection connection = DatabaseConfiguration.getConnection()) {
 
             String insertSql = "SELECT * FROM phone_address WHERE firstname=? OR lastname=?";
@@ -95,18 +108,21 @@ public class AddressRepository {
             preparedStatement.setString(1, request.getFirstname());
             preparedStatement.setString(2, request.getLastname());
 
-//           Statement statement = connection.createStatement();
             ResultSet resultSet = preparedStatement.executeQuery(insertSql);
+            List<PhoneAddress> response = new ArrayList<>();
+            while (resultSet.next()) {
+                PhoneAddress phoneAddress = new PhoneAddress();
+                phoneAddress.setFirstname(resultSet.getString("firstname"));
+                phoneAddress.setLastname(resultSet.getString("lastname"));
+                phoneAddress.setNumber(resultSet.getInt("number"));
+                phoneAddress.setId(resultSet.getLong("id"));
 
-//           PhoneAddress phoneAddress = new PhoneAddress();
-            phoneAddress.setFirstname(resultSet.getString(1));
-            phoneAddress.setLastname(resultSet.getString(2));
-            phoneAddress.setNumber(resultSet.getInt("number"));
-            phoneAddress.setId(resultSet.getLong("id"));
-
+                response.add(phoneAddress);
+            }
+            return response;
         }
-        return phoneAddress;
     }
+
 
 
 }
