@@ -17,7 +17,7 @@ public class FindAddress extends HttpServlet {
     private AddressService addressService = new AddressService();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             FirstNameLastNameAddress firstNameLastNameAddress = objectMapper.readValue(req.getReader(), FirstNameLastNameAddress.class);

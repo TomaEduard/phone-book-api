@@ -14,11 +14,10 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/delete-multiple-address")
 public class DeleteMultipleAddress extends HttpServlet {
 
-
     private AddressService addressService = new AddressService();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             IdAddress idAddress = objectMapper.readValue(req.getReader(), IdAddress.class);
