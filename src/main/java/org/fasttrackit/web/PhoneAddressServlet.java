@@ -34,13 +34,9 @@ public class PhoneAddressServlet extends HttpServlet {
         try {
             AddressListResponse addressListResponse = addressService.getAddressList();
             ObjectMapper objectMapper = new ObjectMapper();
-//            Cand transformi un obiect in string se numeste serializare(serializing/marshalling)
-//            objectMapper.writeValueAsString(topWinners);
             String responseJson = objectMapper.writeValueAsString(addressListResponse);
-//            content type or mime type
             resp.setContentType("application/json");
             resp.getWriter().print(responseJson);
-//            Pentru a anunta pe writer ca am terminat treaba cu el
             resp.getWriter().flush();
 
         } catch (Exception e) {
