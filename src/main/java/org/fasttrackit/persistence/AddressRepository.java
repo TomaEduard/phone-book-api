@@ -16,12 +16,13 @@ public class AddressRepository {
     public void createAddress(SaveAddressRequest request) throws SQLException, IOException, ClassNotFoundException {
         try (Connection connection = DatabaseConfiguration.getConnection()) {
 
-            String insertSql = "INSERT INTO phone_address (firstname, lastname, number) VALUES (?, ?, ?)";
+            String insertSql = "INSERT INTO phone_address (firstname, lastname, number, email) VALUES (?, ?, ?, ?)";
 
             PreparedStatement preparedStatement = connection.prepareStatement(insertSql);
             preparedStatement.setString(1, request.getFirstname());
             preparedStatement.setString(2, request.getLastname());
-            preparedStatement.setInt(3, request.getNumber());
+            preparedStatement.setLong(3, request.getNumber());
+            preparedStatement.setString(4, request.getEmail());
 
             preparedStatement.executeUpdate();
         }
@@ -100,8 +101,8 @@ public class AddressRepository {
     }
 
     public List<PhoneAddress> findAddress(FirstNameLastNameAddress request) throws SQLException, IOException, ClassNotFoundException {
-        try (Connection connection = DatabaseConfiguration.getConnection()) {
 
+        try (Connection connection = DatabaseConfiguration.getConnection()) {
             String insertSql = "SELECT * FROM phone_address WHERE firstname=? OR lastname=?";
 
             PreparedStatement preparedStatement = connection.prepareStatement(insertSql);
