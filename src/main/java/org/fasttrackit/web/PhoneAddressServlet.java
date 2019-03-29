@@ -2,7 +2,10 @@ package org.fasttrackit.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fasttrackit.service.AddressService;
-import org.fasttrackit.transfer.*;
+import org.fasttrackit.transfer.AddressListResponse;
+import org.fasttrackit.transfer.AddressWithId;
+import org.fasttrackit.transfer.IdAddress;
+import org.fasttrackit.transfer.SaveAddressRequest;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,8 +40,14 @@ public class PhoneAddressServlet extends HttpServlet {
 
         try {
             AddressListResponse addressListResponse = addressService.getAddressList();
+
+//            Cand transformi un obiect in string se numeste serializare(serializing/marshalling)
+//            ObjectMapper objectMapper = new ObjectMapper();
             ObjectMapper objectMapper = new ObjectMapper();
+
             String responseJson = objectMapper.writeValueAsString(addressListResponse);
+
+//            content type or mime type
             resp.setContentType("application/json");
             resp.getWriter().print(responseJson);
             resp.getWriter().flush();
@@ -69,13 +78,28 @@ public class PhoneAddressServlet extends HttpServlet {
         setAccessControlHeaders(resp);
 
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            IdAddress idAddress = objectMapper.readValue(req.getReader(), IdAddress.class);
-            addressService.deleteAddress(idAddress);
+
+            String id = req.getParameter("id");
+            addressService.deleteAddress(Long.parseLong(id));
+
         } catch (Exception e) {
             resp.sendError(500, "Internal error: " + e.getMessage());
         }
     }
+
+//    //    Delete
+//    @Override
+//    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        setAccessControlHeaders(resp);
+//
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            IdAddress idAddress = objectMapper.readValue(req.getReader(), IdAddress.class);
+//            addressService.deleteAddress2(idAddress);
+//        } catch (Exception e) {
+//            resp.sendError(500, "Internal error: " + e.getMessage());
+//        }
+//    }
 
     //for Preflight request
     @Override

@@ -42,7 +42,8 @@ public class AddressRepository {
                 phoneAddress.setId(resultSet.getLong("id"));
                 phoneAddress.setFirstname(resultSet.getString("firstname"));
                 phoneAddress.setLastname(resultSet.getString("lastname"));
-
+                phoneAddress.setNumber(resultSet.getInt("number"));
+                phoneAddress.setEmail(resultSet.getString("email"));
                 response.add(phoneAddress);
             }
             return response;
@@ -68,13 +69,13 @@ public class AddressRepository {
         }
     }
 
-    public void deleteAddress(IdAddress request) throws SQLException, IOException, ClassNotFoundException {
+    public void deleteAddress(long id) throws SQLException, IOException, ClassNotFoundException {
         try (Connection connection = DatabaseConfiguration.getConnection()) {
 
-            String insertSql = "DELETE FROM phone_address WHERE id = ?";
+            String query = "DELETE FROM phone_address WHERE id = ?";
 
-            PreparedStatement preparedStatement = connection.prepareStatement(insertSql);
-            preparedStatement.setLong(1, request.getId());
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setLong(1, id);
 
             preparedStatement.executeUpdate();
             System.out.println("*Delete successful.");
@@ -83,6 +84,22 @@ public class AddressRepository {
             System.out.println("*Invalid delete operation");
         }
     }
+
+//    public void deleteAddress2(IdAddress id) throws SQLException, IOException, ClassNotFoundException {
+//        try (Connection connection = DatabaseConfiguration.getConnection()) {
+//
+//            String query = "DELETE FROM phone_address WHERE id = ?";
+//
+//            PreparedStatement preparedStatement = connection.prepareStatement(query);
+//            preparedStatement.setLong(1, id);
+//
+//            preparedStatement.executeUpdate();
+//            System.out.println("*Delete successful.");
+//
+//        } catch (Exception e) {
+//            System.out.println("*Invalid delete operation");
+//        }
+//    }
 
     public void deleteMultipleAddress(IdAddress request) throws SQLException, IOException, ClassNotFoundException {
         try (Connection connection = DatabaseConfiguration.getConnection()) {
@@ -123,7 +140,6 @@ public class AddressRepository {
             return response;
         }
     }
-
 
 
 }

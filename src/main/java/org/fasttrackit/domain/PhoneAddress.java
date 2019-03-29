@@ -6,6 +6,7 @@ public class PhoneAddress {
     private String firstname;
     private String lastname;
     private int number;
+    private String email;
 
     public long getId() {
         return id;
@@ -37,5 +38,13 @@ public class PhoneAddress {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

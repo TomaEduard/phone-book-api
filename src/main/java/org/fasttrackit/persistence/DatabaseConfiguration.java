@@ -18,7 +18,6 @@ public class DatabaseConfiguration {
                              .getClassLoader()
                              .getResourceAsStream("db.properties")) {
 
-
             assert inputStream != null;
             properties.load(inputStream);
 

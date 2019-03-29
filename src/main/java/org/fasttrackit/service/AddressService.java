@@ -29,10 +29,19 @@ public class AddressService {
         addressRepository.updateAddress(request);
     }
 
-    public void deleteAddress(IdAddress request) throws SQLException, IOException, ClassNotFoundException {
-        System.out.println("*Delete Address: " + request);
-        addressRepository.deleteAddress(request);
+    public void deleteAddress(long id) throws SQLException, IOException, ClassNotFoundException {
+        System.out.println("*Delete Address: " + id);
+        addressRepository.deleteAddress(id);
+        System.out.println("*Deleted to do item" + id);
+
     }
+
+//    public void deleteAddress2(IdAddress id) throws SQLException, IOException, ClassNotFoundException {
+//        System.out.println("*Delete Address: " + id);
+//        addressRepository.deleteAddress(id);
+//        System.out.println("*Deleted to do item" + id);
+//
+//    }
 
     public void deleteMultipleAddress(IdAddress request) throws SQLException, IOException, ClassNotFoundException {
         System.out.println("*Delete the last #" + request + " addresses");
